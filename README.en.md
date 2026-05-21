@@ -1,5 +1,7 @@
 # generate-readme
 
+[中文](./README.zh-CN.md) | [English](./README.en.md)
+
 > A README generation skill for AI coding assistants: it creates Chinese, English, or bilingual project documentation from real repository evidence while avoiding private configuration and secrets.
 
 ## Overview

@@ -1,5 +1,7 @@
 # generate-readme
 
+[中文](./README.zh-CN.md) | [English](./README.en.md)
+
 > 一个面向 AI 编码助手的 README 生成技能：从真实仓库内容出发，生成中文、英文或双语项目文档，并避免读取或暴露私有配置。
 
 ## 概览
