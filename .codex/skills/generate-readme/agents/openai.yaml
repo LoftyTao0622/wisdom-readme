@@ -1,0 +1,4 @@
+interface:
+  display_name: Generate README
+  short_description: Generate evidence-based Chinese or English README files without scanning private config.
+  default_prompt: Use Generate README to create concise, bilingual project documentation from the current repository.
