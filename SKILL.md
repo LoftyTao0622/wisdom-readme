@@ -256,13 +256,43 @@ Rules:
 - If evidence is weak, omit the diagram and keep the tree.
 - Keep diagrams small: 5-9 nodes.
 
+### Existing Visual Style And Badges
+
+When an existing README already uses a distinctive top presentation such as centered HTML titles, subtitles, shields.io badges, horizontal rules, emoji labels, or a known section order, preserve that style unless the user explicitly asks for a plain rewrite.
+
+For Chinese full-stack project READMEs that already use badge-style headers, prefer keeping or generating a compact header like:
+
+```html
+<h1 align="center">Project Name</h1>
+
+<p align="center">
+  <strong>项目一句话定位</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/version-0.0.1-blue?style=flat-square" alt="version">
+  <img src="https://img.shields.io/badge/java-17-orange?style=flat-square&logo=openjdk&logoColor=white" alt="java">
+  <img src="https://img.shields.io/badge/spring--boot-3.3.0-green?style=flat-square&logo=springboot&logoColor=white" alt="spring-boot">
+  <img src="https://img.shields.io/badge/react-18-61DAFB?style=flat-square&logo=react" alt="react">
+  <img src="https://img.shields.io/badge/license-未声明-yellow?style=flat-square" alt="license">
+  <img src="https://img.shields.io/badge/docker-compose-blue?style=flat-square&logo=docker" alt="docker">
+</p>
+```
+
+Rules:
+
+- Keep badge facts evidence-based. Do not show Apache-2.0, MIT, or another license badge unless a license file or manifest proves it.
+- If a project previously had a detailed Mermaid architecture diagram, update that diagram in place instead of replacing it with a simpler diagram. Preserve its grouping and visual hierarchy where possible.
+- Do not remove existing visual polish merely to make the README more "standard".
+
 ## Step 7: Security, Privacy, And License Voice
 
-Use first-person maintainer language and avoid generic AI-sounding advice.
+Use concise project-documentation language and avoid generic AI-sounding advice. Prefer objective, maintainer-style instructions over first-person model narration.
 
 Bad style:
 
 ```markdown
+我不会把本地 `.env`、密钥文件或生产配置写进 README，也不会在文档中复述这些文件的内容。
 生产环境建议 LANGSMITH_CAPTURE_CONTENT=false，避免患者文本外传。
 模型 API Key 和数据库密码通过环境变量注入，不要硬编码。
 建议为镜像拉取创建只读账号，不要共享个人主账号。
@@ -273,7 +303,9 @@ Better Chinese style:
 ```markdown
 ## 安全与隐私
 
-我不会把本地 `.env`、密钥文件或生产配置写进 README，也不会在文档中复述这些文件的内容。仓库目前只适合记录示例配置；真实凭据请继续放在部署环境或本机私有配置中。
+项目默认配置只保留运行所需的配置结构。生产环境中的模型 Key、数据库密码、图数据库密码和追踪服务凭据应通过环境变量或私有配置注入，不建议写入仓库。
+
+系统会处理患者主诉、检查资料、诊断结论和医生复核意见。演示、测试和截图时请优先使用脱敏数据；如启用追踪或第三方模型服务，需要先确认数据留存和审计要求。
 ```
 
 Better English style:
@@ -281,25 +313,25 @@ Better English style:
 ```markdown
 ## Security And Privacy
 
-I keep local `.env` files, key files, and production-only configuration out of this README. This repository should document example configuration only; real credentials belong in the deployment environment or local private config.
+Default configuration should document the structure needed to run the project. Production model keys, database passwords, graph database passwords, and tracing credentials should be injected through environment variables or private configuration, not committed to the repository.
 ```
 
 License handling:
 
 - If a license file exists, name it accurately.
 - If no license file exists, do not give legal advice and do not pressure the user.
-- Use first-person, concise wording:
+- Use objective, concise wording:
 
 ```markdown
 ## License
 
-我还没有在仓库中放置许可证文件；在补充 `LICENSE` 之前，这个项目默认只按仓库当前权限使用。
+当前仓库未提供独立的 `LICENSE` 文件。对外分发或开源前，请先补充明确的许可证文本。
 ```
 
 ```markdown
 ## License
 
-I have not added a license file yet. Until `LICENSE` is added, use this project only under the repository's current access permissions.
+This repository does not currently include a standalone `LICENSE` file. Add an explicit license before public distribution or open-source release.
 ```
 
 ## Step 8: Output Length Control
@@ -345,6 +377,7 @@ Before writing or finalizing, verify:
 - [ ] API entries are backed by explicit route/OpenAPI evidence.
 - [ ] Directory tree matches real files and excludes build/dependency output.
 - [ ] Architecture claims are not invented.
-- [ ] Security and license notes use first-person maintainer voice.
+- [ ] Existing README visual style, badges, and architecture diagram structure are preserved unless the user asked for a redesign.
+- [ ] Security and license notes use concise project-documentation language, not AI-like first-person narration.
 - [ ] Chinese and English docs are factually aligned when both are generated.
 - [ ] The README is concise and contains no placeholders.
