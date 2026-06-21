@@ -165,4 +165,4 @@ interface:
 
 ## License
 
-I have not found a license file in this repository. Until `LICENSE` is added, use this skill only under the repository's current access permissions.
+This project is licensed under the [Apache License 2.0](LICENSE).

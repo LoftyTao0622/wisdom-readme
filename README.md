@@ -165,4 +165,4 @@ interface:
 
 ## 许可证
 
-我还没有在仓库中发现许可证文件；在补充 `LICENSE` 之前，这个技能默认只按仓库当前权限使用。
+本项目基于 [Apache License 2.0](LICENSE) 开源。
