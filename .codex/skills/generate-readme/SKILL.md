@@ -1,329 +1,331 @@
 ---
 name: generate-readme
-description: Generate rigorous, evidence-based README documentation for backend, frontend, full-stack, CLI, and library projects. Use this skill when the user asks to "create a readme", "generate readme", "write documentation", "生成readme", "写文档", "生成项目文档", or requests Chinese/English README files.
+description: Generate rigorous, evidence-based README documentation for any software project. Use this skill when the user asks to "create a readme", "generate readme", "write documentation", "生成readme", "写文档", "生成项目文档", or requests README files in any language.
+version: 2.0.0
+argument-hint: "[language: <locale>]"
+user-invocable: true
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - Bash
+  - Write
 ---
 
 # README Generator
 
-Generate polished README documentation from the actual repository contents. Be strict about evidence: document what is present, skip what is unknown, and never invent architecture, deployment topology, API behavior, security posture, roadmap, or license terms.
+Generate polished, reader-centric README documentation from actual repository contents.
 
-## Core Principles
+## README Quality Rubric
 
-1. **Evidence first**: every feature, command, API endpoint, dependency, and architectural statement must be traceable to files in the repository.
-2. **No secret exposure**: never read, summarize, quote, or list sensitive configuration files or credential-like values.
-3. **No overwrite without consent**: if a target README file already exists, ask before overwriting unless the user explicitly requested overwrite.
-4. **Language-aware output**: detect the project language first, then choose README sections, commands, and terminology that fit that ecosystem.
-5. **Short enough to use**: prefer a focused README over a catalog of every file. Keep generated content concise, attractive, and skimmable.
-6. **Human maintainer voice**: security, privacy, and license notes should read like a maintainer's first-person project note, not generic AI advice.
+Before generating, internalize these six criteria. A successful README must satisfy ALL of them. After writing, verify each one (see Verification Pass).
 
-## Step 1: Safe Project Scan
+1. **Reader-first journey** — The README answers questions a new reader asks, in order:
+   "What is this?" → "Should I use it?" → "How do I start?" → "Where do I go next?"
+   The reader is someone who found this repo and wants to know what it does and how to use it in under 5 minutes.
 
-Scan only files that are useful for documentation. Run discovery commands with explicit excludes.
+2. **Evidence-backed** — Every feature, command, endpoint, version number, and architectural claim is traceable to a file in the repository. If the evidence is ambiguous, omit the claim.
 
-### Must Exclude From Scanning
+3. **Actionable** — Every command shown is exact and verifiable from build files or scripts. Every configuration key documents its purpose. The reader can copy-paste and run.
 
-Do **not** read, grep, summarize, or display content from these files or directories:
+4. **Scannable** — Skimming headers alone tells the story. Code blocks are minimal (≤10 lines). Technical details have a home (API table, config reference) — they are not scattered through narrative paragraphs.
 
-- `.git/`, `.svn/`, `.hg/`
-- `node_modules/`, `vendor/`, `.venv/`, `venv/`, `env/`, `__pycache__/`
-- Frontend build output: `dist/`, `build/`, `.next/`, `.nuxt/`, `out/`, `.svelte-kit/`, `coverage/`
-- Backend build output: `target/`, `bin/`, `obj/`, `.gradle/`, `build/`, `classes/`, `generated-sources/`
-- JavaScript package caches: `.npm/`, `.pnpm-store/`, `.yarn/`
-- Logs and dumps: `*.log`, `logs/`, `dump/`, `dumps/`, `*.dump`, `*.sql`, `*.sqlite`, `*.db`
-- Private environment/config files: `.env`, `.env.*`, `*.env`, `application-local.yml`, `application-local.yaml`, `application-prod.yml`, `application-prod.yaml`, `bootstrap-prod.yml`, `bootstrap-prod.yaml`, `settings.local.py`, `local_settings.py`
-- Credential/key material: `*.pem`, `*.key`, `*.p12`, `*.pfx`, `id_rsa*`, `id_ed25519*`, `credentials.*`, `secrets.*`, `secret.*`, `service-account*.json`, `firebase-adminsdk*.json`, `kubeconfig`, `*.kubeconfig`
+5. **WHAT not HOW** — The README describes what the project does and how to use it. Internal implementation details (class hierarchy, algorithm choices, code structure walkthrough) belong in developer docs or CONTRIBUTING.md — not in the README.
 
-When private files are discovered by name, do not call out their exact paths in the generated README. Use a general note such as "private configuration files are intentionally excluded from documentation" instead of writing "docker/deploy/.env contains sensitive information".
+6. **Maintainer voice** — Reads as if the project maintainer wrote it for a new team member. No AI self-reference ("I scanned", "the model found"), no generic advice ("it is recommended that"), no filler.
 
-Safe examples may be read if they exist and are clearly examples:
+## Step 1: Understand The Project First
 
-- `.env.example`, `.env.sample`, `.env.template`
-- `application-example.yml`, `application-example.yaml`
-- `config.example.*`, `settings.example.*`
+Before scanning files, establish what this project IS and who it's FOR. Read in priority order:
 
-### Recommended Scan Commands
+1. Any existing README (`README.md`, `README.*.md`, `docs/`)
+2. Project description field in manifests (`package.json` description, `pyproject.toml` description, `pom.xml` description, `Cargo.toml` description, `mix.exs` description, `*.gemspec` summary)
+3. Top-level directory layout
+4. Entry-point files (CLI main, server startup, app bootstrap)
 
-Use the platform's fastest available search tool. If `rg` is unavailable, use native shell alternatives.
+From these, answer: **what problem does this project solve, and for whom?** This answer shapes every section that follows. Do not proceed to scanning until you can state it in one sentence.
 
-1. Project structure, max depth 4, with excludes for secret files and build output.
-2. Manifest files only:
-   - Node: `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `vite.config.*`, `next.config.*`, `nuxt.config.*`, `tsconfig.json`
-   - Python: `pyproject.toml`, `requirements*.txt`, `setup.py`, `setup.cfg`, `Pipfile`, `poetry.lock`, `uv.lock`
-   - Java/Kotlin: `pom.xml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`, `gradle.properties`, `src/main/resources/application*.yml`, `src/main/resources/application*.yaml`, excluding private profiles listed above
-   - Go: `go.mod`, `go.sum`, `Makefile`, `Taskfile.yml`
-   - Shared: `Dockerfile`, `docker-compose*.yml`, `.github/workflows/*`, `.gitlab-ci.yml`, `LICENSE`, `CHANGELOG.md`, `CONTRIBUTING.md`, `docs/**`
-3. Entry points and routes:
-   - read only source files likely to define startup, CLI, routing, or public APIs.
-   - avoid scanning generated files, minified bundles, compiled output, and vendored dependencies.
-4. Existing docs:
-   - check `README.md`, `README.zh-CN.md`, `README.en.md`, `docs/`, `CHANGELOG.md`, `LICENSE`.
-5. Git metadata:
-   - repo URL and recent commit subjects may be used only as weak context; never invent features from commit titles alone.
+## Step 2: Choose The Right Structure
 
-## Step 2: README Existing-File Branch
+Pick the structure that serves THIS project's readers. The sections below are patterns, not mandates — adapt to what the project actually needs.
 
-Before writing, determine the target file(s):
+### Pattern A: Library / SDK
 
-- `zh`: `README.md` in Chinese, unless the user requests `README.zh-CN.md`.
-- `en`: `README.md` in English, unless the user requests `README.en.md`.
-- `both`: generate separate `README.zh-CN.md` and `README.en.md`. Optionally generate a short `README.md` index only when no `README.md` exists or the user approves.
-- no argument: infer the primary language from existing docs/user request. If the user asks for bilingual docs or the project is meant for both audiences, use `both`.
+For packages consumed by other code.
 
-If any target file already exists:
-
-1. Stop before writing that file.
-2. Tell the user which file exists.
-3. Ask whether to:
-   - overwrite it,
-   - create a separate file such as `README.generated.md`, `README.zh-CN.md`, or `README.en.md`,
-   - merge selected content into the existing README.
-4. Continue only after the user chooses, unless the user already gave explicit overwrite permission.
-
-## Step 3: Language And Project-Type Detection
-
-Detect the implementation language before writing. When multiple languages exist, identify the role of each one instead of forcing a single label.
-
-### Node.js / JavaScript / TypeScript
-
-Signals:
-
-- `package.json`, `vite.config.*`, `next.config.*`, `nuxt.config.*`, `tsconfig.json`
-- `src/main.ts`, `src/index.ts`, `server.ts`, `app.ts`, `pages/`, `app/`, `src/routes/`
-
-README handling:
-
-- Use package manager from lockfile: `pnpm-lock.yaml` → `pnpm`, `yarn.lock` → `yarn`, `package-lock.json` → `npm`.
-- Extract only real scripts from `package.json`.
-- Separate frontend and backend when both exist.
-- Ignore `dist/`, `build/`, `.next/`, `.nuxt/`, `out/`, and coverage output.
-- For frontend projects, emphasize dev/build/preview commands, environment example files, and public configuration.
-- For backend Node projects, document start/test/lint scripts, server entry point, routes, and runtime requirements.
-
-### Python
-
-Signals:
-
-- `pyproject.toml`, `requirements*.txt`, `setup.py`, `Pipfile`, `poetry.lock`, `uv.lock`
-- `main.py`, `app.py`, `manage.py`, `wsgi.py`, `asgi.py`, `src/`, package modules
-
-README handling:
-
-- Detect tooling: `uv`, Poetry, Pipenv, pip/venv.
-- For FastAPI/Flask/Django, document the actual command style only when found in files or scripts.
-- For libraries, include install/import usage only when package metadata or examples exist.
-- Avoid claiming model, database, queue, or cloud integrations unless code/config proves them.
-
-### Java / Kotlin
-
-Signals:
-
-- `pom.xml`, `build.gradle`, `build.gradle.kts`, `settings.gradle`
-- `src/main/java`, `src/main/kotlin`, `src/main/resources`
-
-README handling:
-
-- Detect Maven vs Gradle and use the matching commands.
-- Identify framework only from dependencies or code annotations, such as Spring Boot, Quarkus, Micronaut.
-- Ignore `target/`, `build/`, `.gradle/`, `classes/`, and generated sources.
-- Do not read private Spring profile files such as `application-prod.yml` or `application-local.yml`; read safe example/default config only.
-- Document Java version only if declared in build files.
-
-### Go
-
-Signals:
-
-- `go.mod`, `cmd/**/main.go`, `main.go`, `internal/`, `pkg/`
-
-README handling:
-
-- Use module path from `go.mod`.
-- Document commands such as `go run`, `go build`, and `go test ./...` only when they fit the detected entry point.
-- For CLI tools, include command examples only when flags/examples are discoverable from code or docs.
-- For services, document route/API details only from explicit router definitions or OpenAPI files.
-
-### Frontend / Backend / Full-Stack Classification
-
-- Frontend: UI framework config, browser entry files, static assets, routes/pages, no server entry.
-- Backend: server entry, API routes/controllers, database/migration folders, no browser UI.
-- Full-stack: both frontend and backend signals, monorepo workspaces, or separate `client/` and `server/` directories.
-
-Document full-stack projects with clear subsections:
-
-- Frontend
-- Backend
-- Shared configuration
-- Local development flow
-
-## Step 4: API Scanning Rules
-
-Only include an API section when API evidence exists.
-
-Accepted evidence:
-
-- OpenAPI/Swagger files: `openapi.yaml`, `openapi.yml`, `swagger.json`, `api-docs.*`
-- Route/controller definitions:
-  - Express/Koa/Fastify route calls
-  - Next.js/Nuxt server routes
-  - FastAPI decorators, Flask blueprints, Django urls/views
-  - Spring `@RequestMapping`, `@GetMapping`, `@PostMapping`, etc.
-  - Go router registrations from common routers such as `net/http`, Gin, Echo, Chi, Fiber
-- Existing docs or tests that explicitly call endpoints.
-
-Useful search patterns:
-
-- Node/Express/Fastify/Koa: `.get(`, `.post(`, `.put(`, `.patch(`, `.delete(`, `router.`, `fastify.route`
-- Next/Nuxt server routes: `app/api/**`, `pages/api/**`, `server/api/**`, `server/routes/**`
-- Python: `@app.get`, `@app.post`, `@router.`, `Blueprint(`, `urlpatterns`, `path(`, `re_path(`
-- Java/Kotlin: `@RestController`, `@Controller`, `@RequestMapping`, `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`, `@PatchMapping`
-- Go: `http.HandleFunc`, `.HandleFunc`, `.GET(`, `.POST(`, `.PUT(`, `.PATCH(`, `.DELETE(`, `router.Handle`
-
-Rules:
-
-- Extract method and path only when both are explicit.
-- Include handler/controller name when obvious.
-- Do not infer request/response bodies unless schema, DTO, type, validation model, or docs define them.
-- Do not guess authentication, roles, rate limits, database side effects, or error codes.
-- If endpoints are numerous, show only core groups and point to the source/OpenAPI file.
-- If route construction is dynamic and unclear, write a short note: "接口由运行时代码组装，README 中只列出仓库中可直接确认的入口。"
-
-Preferred compact table:
-
-```markdown
-| Method | Path | Source | Notes |
-|--------|------|--------|-------|
-| GET | `/api/users` | `src/routes/users.ts` | User list endpoint |
 ```
+# Name
+One-line: what it does, what problem it solves.
 
-## Step 5: README Structure
-
-Only include sections with meaningful evidence. A good README usually contains:
-
-```markdown
-# Project Name
-
-> One-line project summary grounded in manifest/docs/code.
-
-## Overview
-
-## Features
-
-## Tech Stack
-
-## Project Structure
-
-## Getting Started
-
-### Prerequisites
-### Installation
-### Configuration
-### Run
-### Test
-
-## API
-
-## Deployment
-
-## Development Notes
-
-## Security And Privacy
-
+## Installation
+## Quick Start (minimal working example: install → import → use)
+## Usage (organized by task, not by class/method)
+## API Reference (link or compact table)
+## Configuration (if any)
 ## License
 ```
 
-Skip empty sections. Do not include placeholder copy such as `TODO`, `TBD`, or "coming soon".
+### Pattern B: Application / Service
 
-## Step 6: Structure And Architecture Diagrams
+For deployable services and applications.
 
-### Directory Tree
+```
+# Name
+One-line: what the service does, its role.
 
-Generate a compact tree:
-
-- max depth 3 unless a deeper level is essential.
-- max 35 lines.
-- show source, config, tests, docs, deployment files, and manifests.
-- omit build output, dependencies, generated code, and private config files.
-
-### Mermaid Architecture
-
-Include a Mermaid diagram only when the repository clearly shows multiple components or layers.
-
-Rules:
-
-- Do not draw databases, queues, cloud services, model providers, external APIs, or microservices unless they are explicitly present in dependencies/config/code/docs.
-- Prefer "request flow" or "module relationship" diagrams over grand architecture maps.
-- If evidence is weak, omit the diagram and keep the tree.
-- Keep diagrams small: 5-9 nodes.
-
-## Step 7: Security, Privacy, And License Voice
-
-Use first-person maintainer language and avoid generic AI-sounding advice.
-
-Bad style:
-
-```markdown
-生产环境建议 LANGSMITH_CAPTURE_CONTENT=false，避免患者文本外传。
-模型 API Key 和数据库密码通过环境变量注入，不要硬编码。
-建议为镜像拉取创建只读账号，不要共享个人主账号。
+## Architecture Overview (if multi-component — keep to 5-9 nodes)
+## Prerequisites
+## Setup & Installation
+## Configuration Reference
+## Running
+## API (if applicable — compact table: Method | Path | Purpose | Source)
+## Operations / Deployment
+## License
 ```
 
-Better Chinese style:
+### Pattern C: CLI Tool
+
+For command-line utilities.
+
+```
+# Name
+One-line: what the tool does.
+
+## Installation
+## Quick Examples (3-5 most common invocations with their output intent)
+## Command Reference
+## Configuration
+## Development
+## License
+```
+
+### Pattern D: Full-Stack / Monorepo
+
+For projects with both frontend and backend.
+
+```
+# Name
+One-line: what the project does.
+
+## Architecture Overview
+## Backend
+   ### Prerequisites, Setup, Configuration, Running
+## Frontend
+   ### Prerequisites, Setup, Configuration, Running
+## Shared / Development Workflow
+## Deployment
+## License
+```
+
+### Structure Principles
+
+- Start with what the reader needs to know FIRST. What is it → how to get it running. Everything else supports these two.
+- A section exists because it answers a real question, not because a template has it. Omit empty sections without comment.
+- Complex commercial projects need more detail — that's expected. The README should be as long as the project requires and no longer. Do not pad; do not truncate to hit an arbitrary line count.
+- If the project already has a README with a well-organized structure and visual identity (badges, centered headers, Mermaid diagrams), preserve and update it in place. Do not flatten existing polish into a generic template.
+
+## Step 3: Safe Project Scan
+
+### Excluded Paths
+
+Never read, grep, or display content from:
+
+- VCS: `.git/`, `.svn/`, `.hg/`
+- Dependencies: `node_modules/`, `vendor/`, `.venv/`, `venv/`, `env/`, `__pycache__/`
+- Build output: `dist/`, `build/`, `.next/`, `.nuxt/`, `out/`, `.svelte-kit/`, `coverage/`, `target/`, `bin/`, `obj/`, `.gradle/`, `classes/`
+- Cache: `.npm/`, `.pnpm-store/`, `.yarn/`
+- Logs & dumps: `*.log`, `logs/`, `dump/`, `*.dump`, `*.sql`, `*.sqlite`, `*.db`
+- Private config: `.env`, `.env.*`, `*.env`, `application-local.*`, `application-prod.*`, `bootstrap-prod.*`, `settings.local.*`, `local_settings.*`
+- Credentials: `*.pem`, `*.key`, `*.p12`, `*.pfx`, `id_rsa*`, `id_ed25519*`, `credentials.*`, `secrets.*`, `secret.*`, `service-account*.json`, `kubeconfig`
+
+Safe example files MAY be read: `.env.example`, `.env.sample`, `config.example.*`, `application-example.*`
+
+When private files exist, do not call out their exact paths in the README. Use a general note or omit entirely.
+
+### Scan Order
+
+1. **Existing docs** — `README.md`, `README.*.md`, `docs/`, `CHANGELOG.md`, `CONTRIBUTING.md`, `LICENSE`
+2. **Manifests** — detect language, framework, dependencies, versions
+3. **Entry points** — main source, server startup, CLI entry, route definitions
+4. **Configuration** — example config, env templates, config structs/models
+5. **Project tree** — source layout, test layout, deployment configs
+
+### Project Type Detection
+
+Use the following signals to identify the implementation language(s). When multiple languages coexist, identify each one's role (e.g., "Python backend + TypeScript frontend") — do not force a single label.
+
+| Ecosystem | Key Signals |
+|-----------|-------------|
+| Node.js / TypeScript | `package.json`, `tsconfig.json`, `vite.config.*`, `next.config.*`, `nuxt.config.*` |
+| Python | `pyproject.toml`, `requirements*.txt`, `setup.py`, `setup.cfg`, `Pipfile`, `uv.lock`, `poetry.lock` |
+| Java / Kotlin | `pom.xml`, `build.gradle`, `build.gradle.kts`, `settings.gradle` |
+| Go | `go.mod`, `cmd/`, `main.go`, `internal/` |
+| Rust | `Cargo.toml`, `src/main.rs`, `src/lib.rs` |
+| C# / .NET | `*.csproj`, `*.sln`, `*.fsproj`, `Program.cs` |
+| Ruby | `Gemfile`, `*.gemspec`, `Rakefile` |
+| PHP | `composer.json`, `index.php`, `artisan` |
+| Elixir | `mix.exs`, `lib/`, `config/` |
+| C / C++ | `CMakeLists.txt`, `Makefile`, `configure.ac`, `meson.build` |
+| Swift | `Package.swift`, `*.xcodeproj`, `*.xcworkspace` |
+| Dart / Flutter | `pubspec.yaml`, `lib/main.dart` |
+| Zig | `build.zig`, `src/main.zig` |
+| Shell | `*.sh` with project-scale structure, `Makefile`-only projects |
+
+README handling rules by ecosystem:
+
+- **Node.js/TS**: Detect package manager from lockfile (`pnpm-lock.yaml` → pnpm, `yarn.lock` → yarn, `package-lock.json` → npm, `bun.lockb` → bun). Extract real scripts from `package.json`. Separate frontend/backend when both exist.
+- **Python**: Detect tooling (`uv.lock` → uv, `poetry.lock` → Poetry, `Pipfile` → Pipenv, `requirements*.txt` → pip). For web frameworks, document the actual run command found in code or scripts.
+- **Java/Kotlin**: Detect Maven vs Gradle. Identify framework from dependencies (Spring Boot, Quarkus, Micronaut). Do not read private Spring profile files.
+- **Go**: Use module path from `go.mod`. For CLI tools, include command examples from flag definitions. For services, document routes from explicit router registrations.
+- **Rust**: Detect binary vs library from `Cargo.toml`. Use `cargo` commands. For CLI, extract help text or arg definitions.
+- **C#/.NET**: Use `dotnet` commands. Identify project type (web, console, library) from `.csproj`.
+- **Ruby**: Detect gem vs Rails app. Use `bundle`/`gem` commands accordingly.
+- **PHP**: Detect Composer packages vs Laravel/Symfony apps. Use appropriate artisan/console commands.
+- **Elixir**: Detect Mix project type. Use `mix` commands. Identify Phoenix if present.
+- **Dart/Flutter**: Detect pure Dart vs Flutter. Use `dart`/`flutter` commands accordingly.
+
+## Step 4: Content Generation Rules
+
+### Overview
+
+2-4 sentences answering: **What does this project do? Who is it for? What problem does it solve?** Ground in the project description from manifests, existing docs, or entry-point comments.
+
+Do NOT describe the tech stack here, do NOT list features, do NOT say "built with X and Y."
+
+### Features
+
+- List user-visible capabilities only. Not implementation details.
+- Each feature: one line describing what it does, not how.
+- BAD: "Uses Redis for caching" — GOOD: "Fast responses with automatic caching"
+- BAD: "Implemented with Spring Security" — GOOD: "Role-based access control for admin and user accounts"
+- Group related features. List only what the project actually has — do not pad.
+
+### Tech Stack
+
+A categorized reference table, not narrative prose. Include only categories with evidence:
+
+| Category | Technology | Version | Purpose |
+|----------|-----------|---------|---------|
+| Runtime | Node.js | 22 | Server runtime |
+
+Keep to one row per distinct technology. Group related items under category headers.
+
+### Project Structure
+
+Compact directory tree:
+- Max depth 3 (deeper only if showing a critical subdirectory)
+- Max 40 lines
+- Show: source, config, tests, docs, deployment files
+- Omit: build output, dependencies, generated code, private config
+
+### Getting Started
+
+Every command shown must be verifiable from the project's build files, scripts, or Makefile.
+
+- **Prerequisites**: runtime versions, required external services (database, cache, etc.) — only what the project actually needs.
+- **Installation**: exact commands from clone to dependencies installed. One path, not every possible variant.
+- **Configuration**: what env vars or config files must be set, what each key means for running the project. Derive from example config files.
+- **Run**: the exact command(s) to start the project.
+- **Test**: the exact command to run tests.
+
+### API
+
+Only include if route definitions or OpenAPI files exist.
+
+Use a compact table:
+
+| Method | Path | Purpose | Source |
+|--------|------|---------|--------|
+| GET | `/api/users` | List users | `src/routes/users.ts:42` |
+
+Rules:
+- Extract method and path only when both are explicit in source.
+- Do not infer request/response schemas, auth, rate limits, or error codes without evidence.
+- If >15 endpoints, show representative groups and link to the OpenAPI file or route directory.
+- If route construction is dynamic, note it briefly: "Routes are assembled at runtime; see `src/routes/` for definitions."
+
+### Architecture Diagram
+
+Include a Mermaid diagram only when the repository clearly shows multiple interacting components.
+
+- Max 7-9 nodes.
+- Label nodes with component names (e.g., "API Server", "Web Frontend"), not technology names (e.g., "Express.js", "React").
+- Do not draw external services (databases, queues, clouds) unless explicitly configured in the project.
+- If architecture is simple or evidence is weak, omit the diagram.
+
+### Security, Privacy, and License
+
+Use maintainer-first language. No generic AI advice.
+
+Security & Privacy (when sensitive data is involved):
 
 ```markdown
 ## 安全与隐私
 
-我不会把本地 `.env`、密钥文件或生产配置写进 README，也不会在文档中复述这些文件的内容。仓库目前只适合记录示例配置；真实凭据请继续放在部署环境或本机私有配置中。
-```
+项目默认配置只保留运行所需的配置结构。生产环境中的密钥、密码和凭据应通过环境变量或私有配置注入，不建议写入仓库。
 
-Better English style:
+系统处理患者主诉、检查资料、诊断结论等医疗数据。演示、测试和截图请优先使用脱敏数据。
+```
 
 ```markdown
 ## Security And Privacy
 
-I keep local `.env` files, key files, and production-only configuration out of this README. This repository should document example configuration only; real credentials belong in the deployment environment or local private config.
+Default configuration documents the structure needed to run the project. Production keys, passwords, and credentials should be injected through environment variables or private configuration — not committed.
+
+This system handles medical data. Use de-identified data for demos, tests, and screenshots.
 ```
 
-License handling:
-
-- If a license file exists, name it accurately.
-- If no license file exists, do not give legal advice and do not pressure the user.
-- Use first-person, concise wording:
+License:
+- If a license file exists, name it accurately and link to it.
+- If no license file exists, state it factually without legal advice or pressure:
 
 ```markdown
 ## License
 
-我还没有在仓库中放置许可证文件；在补充 `LICENSE` 之前，这个项目默认只按仓库当前权限使用。
+当前仓库未提供独立的 `LICENSE` 文件。对外分发或开源前，请补充明确的许可证文本。
 ```
 
 ```markdown
 ## License
 
-I have not added a license file yet. Until `LICENSE` is added, use this project only under the repository's current access permissions.
+This repository does not currently include a standalone `LICENSE` file. Add an explicit license before public distribution or open-source release.
 ```
 
-## Step 8: Output Length Control
+## Step 5: Content Quality Rules
 
-Keep README output practical:
+### MUST Include
+- What the project does and who it's for (first 5 lines)
+- How to install, configure, run, and test (exact, verified commands)
+- What external dependencies or services are needed
+- Where to find more (docs, API reference, contributing guide, website)
+- License status (factual only)
 
-- target length: 120-220 lines for normal projects.
-- hard limit: 300 lines unless the user requests exhaustive documentation.
-- max 8 features.
-- max 12 tech stack rows.
-- max 35 directory tree lines.
-- max 20 API rows; group or link to source when larger.
-- max 8 commands across install/run/test/build/deploy unless the project explicitly needs more.
-- avoid printing the full generated README in chat if it is long; summarize changed files and key sections instead.
+### MUST Exclude
+- Code blocks longer than 10 lines — link to source files instead
+- Log output, error messages, stack traces, terminal dumps
+- Implementation details: class hierarchy, algorithm choices, internal architecture walkthrough
+- Generic advice: "it is recommended to use proper error handling", "you should follow best practices"
+- AI self-reference: "I scanned", "I found", "according to the repository", "the model detected"
+- Filler: "This section will be updated", "TODO", "TBD", "coming soon"
+- Duplicate content across sections — say it once, in the right place
 
-## Step 9: Bilingual Documentation
+### Tone Rules
+- **Direct, not hedged**: "Install dependencies:" not "You can install dependencies by running:"
+- **Factual, not speculative**: "Supports PostgreSQL" not "Should work with most databases"
+- **Maintainer, not AI**: Write as the person who built the project. Never use first-person to describe what the model did.
+- **Consistent**: Same voice in every section. If the Overview is informal, the API reference shouldn't sound like a legal document.
 
-When generating both Chinese and English:
+## Step 6: Handling Existing READMEs
 
-- create separate files: `README.zh-CN.md` and `README.en.md`.
-- keep the two versions equivalent in structure and facts.
-- do not machine-translate awkwardly; localize section names and command descriptions naturally.
-- avoid mixing Chinese and English paragraphs in the same file except for code, commands, package names, and standard technical names.
-- if creating or updating `README.md`, make it a short index linking to both language versions, unless the user asks for one language as the primary README.
+If a target file already exists:
+1. Stop and tell the user which file exists.
+2. Ask: overwrite, create a separate file, or merge.
+3. Proceed only after the user chooses (unless they already gave explicit overwrite permission).
 
-Recommended `README.md` index:
+Target file rules:
+- Language specified by user → generate in that language to `README.md` (or `README.<locale>.md`).
+- No language specified → infer from existing docs or user's message language.
+- Bilingual/multilingual → separate files per language. Optionally a short `README.md` index linking to them:
 
 ```markdown
 # Project Name
@@ -332,17 +334,53 @@ Recommended `README.md` index:
 - [English Documentation](./README.en.md)
 ```
 
-## Quality Checklist
+Do NOT mix languages within the same file except for code, commands, package names, and standard technical identifiers.
 
-Before writing or finalizing, verify:
+## Step 7: Bilingual & Multilingual Generation
 
-- [ ] No excluded private files were read or summarized.
-- [ ] Existing README targets were checked and overwrite permission was handled.
-- [ ] Project language and project type were detected before generation.
-- [ ] Commands come from manifests, build files, docs, or clear framework conventions.
-- [ ] API entries are backed by explicit route/OpenAPI evidence.
-- [ ] Directory tree matches real files and excludes build/dependency output.
-- [ ] Architecture claims are not invented.
-- [ ] Security and license notes use first-person maintainer voice.
-- [ ] Chinese and English docs are factually aligned when both are generated.
-- [ ] The README is concise and contains no placeholders.
+- Create separate files per language.
+- Keep structure and facts equivalent across all versions.
+- Localize naturally — do not machine-translate. Section names, explanations, and notes should sound native in each language.
+- Code, commands, and technical identifiers remain in their original language.
+- Support any human language the user requests. If unsure, ask.
+
+## Step 8: MANDATORY Verification Pass
+
+After writing the README, perform a second pass. This is NOT optional. Check each item against the generated output, and fix any failures before reporting done.
+
+### A. Factual Accuracy
+For each claim in the README, trace it to a source file:
+
+- [ ] Every command (`npm run dev`, `go build`, `cargo test`, etc.) exists in build files, scripts, or Makefile.
+- [ ] Every API endpoint (method + path) was found in source code or an OpenAPI file.
+- [ ] Every version number comes from a manifest or lockfile.
+- [ ] Every external service mentioned (database, cache, queue, third-party API) has corresponding dependency or config evidence.
+- [ ] Architecture node descriptions match source directories or documented modules.
+- [ ] License name matches the actual `LICENSE` file. If no license file, the README states so without inventing one.
+
+### B. Content Integrity
+Inspect the generated README line by line:
+
+- [ ] First 5 lines tell the reader what the project does and who it's for.
+- [ ] No code block exceeds 10 lines.
+- [ ] No log output, error messages, stack traces, or terminal dumps appear.
+- [ ] No AI self-reference anywhere (`grep` for: "I scanned", "I found", "according to", "the model", "the agent", "the repository shows").
+- [ ] No filler or placeholder content (`grep` for: "TODO", "TBD", "coming soon", "will be added", "placeholder").
+- [ ] No implementation-detail narrative: class hierarchy, algorithm walkthrough, "the code is organized as follows"-style paragraphs.
+
+### C. Structure Quality
+Verify the reader's journey:
+
+- [ ] Every section answers a real reader question. No section exists solely because a template includes it.
+- [ ] Tech stack is a reference table, not narrative prose.
+- [ ] The README would let a new developer clone, configure, and run the project without asking questions.
+- [ ] Existing visual style (badges, centered headers, Mermaid diagrams) is preserved unless explicitly asked to change.
+
+### D. Tone
+Read the entire README as if you're a new team member:
+
+- [ ] Consistent voice — same person appears to have written every section.
+- [ ] No hedging ("should work", "may need", "it is recommended", "please note that").
+- [ ] No generic advice divorced from this specific project.
+
+If any check fails, fix it. Do not report the README as complete until all checks pass.
