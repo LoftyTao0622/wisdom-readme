@@ -2,167 +2,129 @@
 
 [中文](./README.zh-CN.md) | [English](./README.en.md)
 
-> A README generation skill for AI coding assistants: it creates Chinese, English, or bilingual project documentation from real repository evidence while avoiding private configuration and secrets.
+> A README generation skill for AI coding assistants — produces rigorous, reader-centric project documentation from real repository evidence.
 
-## Overview
+## What It Does
 
-`generate-readme` helps users create rigorous and maintainable README documentation. Its goal is not to make a repository sound bigger than it is; its job is to document what can be verified from the files that actually exist.
+`generate-readme` helps you create or improve README documentation from scratch. It doesn't polish the repository — it documents what can be verified from the files that exist.
 
-This skill supports backend, frontend, full-stack, CLI, and library projects. It scans project structure, manifest files, entry points, route or API evidence, existing documentation, and license information before deciding which README sections are appropriate.
+**Core constraints:**
 
-## Use Cases
+- **Reader-first** — organized by the reader's journey: "What is this → Should I use it → How do I start → Where next"
+- **Evidence-backed** — every feature, command, endpoint, and version traces to a source file; ambiguous claims are omitted
+- **Actionable** — every command is verified from build files or scripts; the reader can copy, paste, and run
+- **WHAT not HOW** — describes what the project does and how to use it; implementation details belong in developer docs
+- **Maintainer voice** — reads like a project maintainer explaining things to a new team member, not an AI reporting scan results
 
-- Create the first `README.md` for a new project
-- Turn an existing project into Chinese or English documentation
-- Extract installation, run, test, and build instructions for frontend, backend, full-stack, CLI, and library projects
-- Document tech stack, project structure, API entry points, and development notes from real code
-- Generate bilingual documentation as `README.zh-CN.md` and `README.en.md`
-- Produce useful documentation without reading private configuration or credential files
+**Capabilities:**
 
-## How To Trigger
+- Auto-detects 14 programming language ecosystems (Node/TS, Python, Java/Kotlin, Go, Rust, C#/.NET, Ruby, PHP, Elixir, C/C++, Swift, Dart/Flutter, Zig, Shell)
+- Adapts structure by project type: Library/SDK, Application/Service, CLI Tool, Full-stack/Monorepo
+- Extracts verifiable API endpoints, directory trees, and configuration keys from source code
+- Generates documentation in any human language (Chinese, English, Japanese, etc.)
+- Bilingual output with equivalent structure and facts across versions
+- All done without reading private config, credentials, logs, or build artifacts
 
-After installing this skill in an AI assistant that supports skills, ask for README generation in natural language.
+## Quick Start
 
-Common prompts:
+### Install
+
+Copy `SKILL.md` into your assistant's skills directory, or clone this repo directly into it:
 
 ```text
-给这个项目生成 README
-生成中文 README
-生成英文 README
-生成双语项目文档
-用 generate-readme 给当前仓库写文档
+# Claude Code
+.claude/skills/generate-readme/SKILL.md
+
+# Codex
+.codex/skills/generate-readme/SKILL.md
+
+# Cursor
+.cursor/skills/generate-readme/SKILL.md
+
+# Trae
+.trae/skills/generate-readme/SKILL.md
+```
+
+### Trigger
+
+After installation, ask in natural language:
+
+```text
 create a readme for this repository
+给这个项目生成 README
 generate readme language: both
+日本語のREADMEを生成して
 ```
 
-The skill metadata exposes this argument hint:
+### Argument
 
 ```text
-[language: zh|en|both]
+[language: <locale>]
 ```
 
-Argument behavior:
-
-| Argument | Output |
-|----------|--------|
-| `zh` | Generate a Chinese README, usually targeting `README.md` |
-| `en` | Generate an English README, usually targeting `README.md` |
+| Argument | Behavior |
+|----------|----------|
+| `zh` | Generate a Chinese README |
+| `en` | Generate an English README |
+| `<locale>` | Generate in any language (e.g., `ja`, `fr`, `ko`) |
 | `both` | Generate `README.zh-CN.md` and `README.en.md` |
-| omitted | Infer the language from the user request, existing docs, and project audience |
+| omitted | Inferred from user request, existing docs, and project audience |
 
-## Recommended Prompts
-
-For Chinese documentation:
-
-```text
-使用 generate-readme，为当前仓库生成中文 README。
-请基于真实文件扫描，不要编造功能、部署方式或 API。
-```
-
-For English documentation:
+### Recommended Prompts
 
 ```text
 Use generate-readme to create an English README for this repository.
 Only document facts that can be verified from the codebase.
 ```
 
-For bilingual documentation:
-
 ```text
-使用 generate-readme 生成双语文档，language: both。
-请分别创建 README.zh-CN.md 和 README.en.md，并保持事实一致。
-```
-
-When a README already exists:
-
-```text
-使用 generate-readme 检查现有 README，并生成一份 README.generated.md，不要覆盖原文件。
+使用 generate-readme，为当前仓库生成中文 README。
+请基于真实文件扫描，不要编造功能、部署方式或 API。
 ```
 
 ## Workflow
 
-The skill works in this order:
-
-1. **Safe project scan**: read only files that help documentation, skipping dependencies, build output, logs, database files, private configuration, and key material.
-2. **Existing README check**: if a target README already exists, ask whether to overwrite, create a separate file, or merge content unless overwrite was explicitly requested.
-3. **Project type detection**: infer language and project type from files such as `package.json`, `pyproject.toml`, `pom.xml`, `go.mod`, entry points, and directory layout.
-4. **Evidence extraction**: collect tech stack, commands, structure, APIs, and notes from manifests, source files, configuration, existing docs, and route definitions.
-5. **README generation**: include only sections backed by evidence, and skip empty or placeholder sections.
-6. **Quality check**: verify that no sensitive files were read, no architecture was invented, and no private configuration was written into the README.
-
-## Generated Content
-
-The skill chooses sections based on the project instead of forcing a fixed template. Common sections include:
-
-- Project summary
-- Features
-- Tech stack
-- Project structure
-- Getting started
-- Configuration
-- Run, test, and build commands
-- API documentation
-- Deployment notes
-- Development notes
-- Security and privacy
-- License
-
-If the repository does not include API evidence, deployment configuration, or a license file, the skill does not invent those sections.
+1. **Understand the project** — read existing docs, project description fields, and directory layout to determine what the project does and who it's for
+2. **Choose the structure** — pick the right section layout based on project type (library/app/CLI/full-stack)
+3. **Safe scan** — read manifests, entry points, route definitions, and example configs; skip dependencies, build output, logs, and credentials
+4. **Generate content** — write each section with source-file evidence for every claim
+5. **Mandatory verification** — independent second pass: are commands executable, do endpoints exist in source, is there any AI self-reference or placeholder, is the tone consistent
 
 ## Safety Rules
 
-`generate-readme` explicitly avoids reading, summarizing, or displaying these files:
+These paths are never read or displayed:
 
-- `.env`, `.env.*`, `*.env`
-- Private Spring configuration such as `application-prod.yml` and `application-local.yml`
-- Keys, certificates, and credential files such as `*.pem`, `*.key`, `credentials.*`, and `secrets.*`
-- Database, dump, and log files such as `*.db`, `*.sqlite`, `*.sql`, and `*.log`
-- Dependencies, caches, and build output such as `node_modules/`, `dist/`, `build/`, and `target/`
+- Credentials and keys: `.env`, `*.pem`, `*.key`, `credentials.*`, `secrets.*`, `kubeconfig`
+- Private config: `application-prod.yml`, `application-local.yml`, `settings.local.py`
+- Dependencies and build output: `node_modules/`, `dist/`, `build/`, `target/`, `.next/`
+- Logs and databases: `*.log`, `*.sqlite`, `*.db`, `*.sql`
 
-When private configuration files are present, the generated README uses a general note instead of listing exact paths or repeating file contents.
+When private files are present, paths are never exposed in the output.
 
-## Installation Layout
-
-This repository contains skill copies for multiple assistants.
+## Project Layout
 
 ```text
 wisdom-readme/
-├── SKILL.md
-├── .agents/
-│   └── skills/generate-readme/SKILL.md
-├── .claude/
-│   └── skills/generate-readme/SKILL.md
-├── .codex/
-│   └── skills/generate-readme/
-│       ├── SKILL.md
-│       └── agents/openai.yaml
-├── .cursor/
-│   └── skills/generate-readme/SKILL.md
-└── .trae/
-    └── skills/generate-readme/SKILL.md
+├── SKILL.md              ← source of truth (edit here)
+├── LICENSE
+├── README.md             ← short index
+├── README.zh-CN.md
+├── README.en.md
+├── .agents/skills/generate-readme/
+├── .claude/skills/generate-readme/
+├── .codex/skills/generate-readme/
+├── .cursor/skills/generate-readme/
+└── .trae/skills/generate-readme/
 ```
 
-Each platform usually reads the `SKILL.md` under its own directory. If you maintain one source of truth, edit the root `SKILL.md` first and then sync it into the platform-specific directories.
+Platform-specific `SKILL.md` copies are kept in sync with the root version.
 
-## Codex Interface Metadata
+## Maintenance
 
-`.codex/skills/generate-readme/agents/openai.yaml` defines how this skill appears in the Codex interface:
-
-```yaml
-interface:
-  display_name: Generate README
-  short_description: Generate evidence-based Chinese or English README files without scanning private config.
-  default_prompt: Use Generate README to create concise, bilingual project documentation from the current repository.
-```
-
-## Maintenance Notes
-
-- Update the root `SKILL.md` first when changing skill behavior.
-- Keep `.agents`, `.claude`, `.codex`, `.cursor`, and `.trae` copies aligned when publishing to multiple assistants.
-- When adding rules, describe both what the skill may do and what it must avoid.
-- Keep safe scanning conservative; it is better to read less than to pull credentials or production configuration into a README.
-- Preserve the core constraints: evidence first, no invented claims, and concise output.
+- Edit the root `SKILL.md` first when changing behavior, then sync to platform directories
+- Err on the side of conservative scanning — reading fewer files is better than exposing credentials
+- Preserve the core constraints: evidence first, no invention, reader-centric output
 
 ## License
 
-This project is licensed under the [Apache License 2.0](LICENSE).
+[Apache License 2.0](LICENSE)
