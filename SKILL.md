@@ -185,6 +185,10 @@ README handling rules by ecosystem:
 
 Do NOT describe the tech stack here, do NOT list features, do NOT say "built with X and Y."
 
+### Badges And Visual Identity
+
+When the project uses technology badges, place a concise positioning line directly below the title before the badge group. That line must state what the project is and who it is for, so badges never replace the required first-five-line overview. Preserve an existing badge style when updating a README; add badges only for technologies, versions, or project metadata supported by repository evidence, and do not invent license or deployment badges.
+
 ### Features
 
 - List user-visible capabilities only. Not implementation details.
@@ -355,6 +359,7 @@ For each claim in the README, trace it to a source file:
 Inspect the generated README line by line:
 
 - [ ] First 5 lines tell the reader what the project does and who it's for.
+- [ ] If badges appear near the title, a positioning line comes before them and the badges do not carry the overview by themselves.
 - [ ] No code block exceeds 10 lines.
 - [ ] No log output, error messages, stack traces, or terminal dumps appear.
 - [ ] No AI self-reference anywhere (`grep` for: "I scanned", "I found", "according to", "the model", "the agent", "the repository shows").
