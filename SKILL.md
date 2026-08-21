@@ -1,13 +1,48 @@
 ---
 name: generate-readme
 description: Generate rigorous, evidence-based README documentation for any software project. Use this skill when the user asks to "create a readme", "generate readme", "write documentation", "生成readme", "写文档", "生成项目文档", or requests README files in any language.
-argument-hint: "[language: <locale>]"
 allowed-tools: [Read, Glob, Grep, Bash, Write]
 ---
 
 # README Generator
 
 Generate polished, reader-centric README documentation from actual repository contents.
+
+## Decision Rules
+
+Use these rules to resolve conflicts between formatting, completeness, and evidence:
+
+1. **Evidence beats presentation.** Omit a claim, badge, version, command, endpoint, or diagram when repository evidence is missing or ambiguous.
+2. **Reader orientation beats metadata.** The opening content must explain what the project is and who it serves before the reader reaches setup instructions. Technology badges, status badges, language navigation, and other metadata never count as that explanation.
+3. **Existing visual identity beats a new template.** Preserve a useful title treatment, badge style, navigation, and diagrams when updating an existing README, unless they are factually wrong or the user asks for a redesign.
+4. **User instructions beat defaults.** Follow the requested language, output file, structure, and overwrite/merge choice when explicitly provided.
+5. **Specific rules beat general rules.** Apply ecosystem-specific guidance only after the shared safety and evidence rules; do not force a single stack or README pattern onto a mixed project.
+
+When two rules still appear incompatible, keep the reader's first useful action clear, state less rather than speculate, and prefer a short readable README over a complete-looking but weakly supported one.
+
+### Opening Layout Contract
+
+Treat the opening as a **content block**, not a fixed number of physical Markdown lines. The first meaningful block must contain the project name and a concise positioning statement answering what it is and who it is for. A language switcher may appear above or below that block. Badges may appear above or below the positioning statement only when the surrounding README style clearly requires it, but they must remain metadata and must not be used as the introduction.
+
+Use one of these layouts:
+
+```markdown
+# Project Name
+
+One sentence explaining what the project is and who it serves.
+
+[technology badge] [status badge]
+```
+
+```markdown
+# Project Name
+
+[technology badge] [status badge]
+
+One sentence explaining what the project is and who it serves.
+```
+
+For a centered or branded README, the same contract applies inside the header block. Do not force badges below the overview when doing so would break an established visual identity; make the positioning statement prominent and immediately readable instead.
 
 ## README Quality Rubric
 
@@ -36,11 +71,13 @@ Before scanning files, establish what this project IS and who it's FOR. Read in 
 3. Top-level directory layout
 4. Entry-point files (CLI main, server startup, app bootstrap)
 
-From these, answer: **what problem does this project solve, and for whom?** This answer shapes every section that follows. Do not proceed to scanning until you can state it in one sentence.
+From these, answer: **what problem does this project solve, and for whom?** Keep this as a working positioning statement before drafting. If the repository does not provide enough evidence for a precise audience, use a narrower factual description such as "a command-line tool for ..." rather than inventing a persona.
 
 ## Step 2: Choose The Right Structure
 
 Pick the structure that serves THIS project's readers. The sections below are patterns, not mandates — adapt to what the project actually needs.
+
+Classify by the primary reader action, not by the largest dependency or file count. A repository can combine patterns: for example, document a CLI as the primary product and add a short service section for its optional server mode. For monorepos, identify independently runnable packages and provide one clear top-level path before package-specific details.
 
 ### Pattern A: Library / SDK
 
@@ -181,13 +218,13 @@ README handling rules by ecosystem:
 
 ### Overview
 
-2-4 sentences answering: **What does this project do? Who is it for? What problem does it solve?** Ground in the project description from manifests, existing docs, or entry-point comments.
+Write 1-4 sentences answering: **What does this project do? Who is it for? What problem does it solve?** Ground the wording in manifests, existing docs, or entry-point comments. Put it in the opening content block or immediately after the badges, depending on the preserved visual layout.
 
-Do NOT describe the tech stack here, do NOT list features, do NOT say "built with X and Y."
+Do not turn the overview into a stack list, feature list, or implementation tour. A technology name is allowed only when it is part of the product identity or necessary to distinguish the project (for example, "a PostgreSQL migration tool"); put the complete stack in the Tech Stack table.
 
 ### Badges And Visual Identity
 
-When the project uses technology badges, place a concise positioning line directly below the title before the badge group. That line must state what the project is and who it is for, so badges never replace the required first-five-line overview. Preserve an existing badge style when updating a README; add badges only for technologies, versions, or project metadata supported by repository evidence, and do not invent license or deployment badges.
+When the project uses badges, classify them as technology, runtime/version, quality/status, community, or project metadata. Keep only badges supported by repository evidence. Preserve an existing badge style when updating a README; add badges only when they improve orientation or trust. Do not invent license, CI, coverage, deployment, download, or social badges. Badges are compact metadata: they do not replace the positioning statement, Overview, Features, or Tech Stack table.
 
 ### Features
 
@@ -205,7 +242,14 @@ A categorized reference table, not narrative prose. Include only categories with
 |----------|-----------|---------|---------|
 | Runtime | Node.js | 22 | Server runtime |
 
-Keep to one row per distinct technology. Group related items under category headers.
+Keep to one row per distinct technology. Group related items under category headers. Use `—` or omit the Version column when a version cannot be established reliably; do not infer a runtime version from a dependency lockfile. Include a technology only when it helps readers install, integrate, operate, or contribute. Omit incidental transitive dependencies.
+
+Keep these concepts separate:
+
+- **Badges** summarize a small number of high-signal facts near the title.
+- **Tech Stack** records technologies and their roles for technical readers.
+- **Features** describe user-visible outcomes, never dependency names.
+- **Architecture** explains component relationships, never acts as a decorated stack list.
 
 ### Project Structure
 
@@ -224,6 +268,8 @@ Every command shown must be verifiable from the project's build files, scripts, 
 - **Configuration**: what env vars or config files must be set, what each key means for running the project. Derive from example config files.
 - **Run**: the exact command(s) to start the project.
 - **Test**: the exact command to run tests.
+
+If a required command or configuration value cannot be verified, do not present a guessed command as copy-pasteable. Say what is confirmed and link to the relevant source file, or omit the step when it is not required for the documented path. Distinguish a local development path from a production or deployment path when both are present.
 
 ### API
 
@@ -291,10 +337,11 @@ This repository does not currently include a standalone `LICENSE` file. Add an e
 ## Step 5: Content Quality Rules
 
 ### MUST Include
-- What the project does and who it's for (first 5 lines)
-- How to install, configure, run, and test (exact, verified commands)
-- What external dependencies or services are needed
-- Where to find more (docs, API reference, contributing guide, website)
+- What the project does and who it's for in the opening content block (badges and navigation do not count as prose)
+- The shortest verified path to the project's primary use: install and use a library, run an application, invoke a CLI, or consume the service
+- Required external dependencies or services, when present
+- Configuration, run, and test instructions only when they exist and are relevant to the documented path
+- Links to existing docs, API references, contributing guides, or websites when present
 - License status (factual only)
 
 ### MUST Exclude
@@ -315,9 +362,10 @@ This repository does not currently include a standalone `LICENSE` file. Add an e
 ## Step 6: Handling Existing READMEs
 
 If a target file already exists:
-1. Stop and tell the user which file exists.
-2. Ask: overwrite, create a separate file, or merge.
-3. Proceed only after the user chooses (unless they already gave explicit overwrite permission).
+1. Infer intent from the request. "Improve", "update", "fix", "refresh", or equivalent language means edit or merge into the existing file. "Regenerate" or "rewrite" means replacement is authorized while preserving verified facts and useful visual identity.
+2. Ask whether to overwrite, merge, or create a separate file only when the request merely says to "create" or "generate" and the intended treatment is genuinely ambiguous.
+3. Before replacing content, preserve verified project-specific details that are not easily reconstructed, including troubleshooting notes, compatibility constraints, acknowledgements, and custom links.
+4. Do not preserve stale or unsupported claims solely because they already exist. Reconcile them against current repository evidence.
 
 Target file rules:
 - Language specified by user → generate in that language to `README.md` (or `README.<locale>.md`).
@@ -355,11 +403,21 @@ For each claim in the README, trace it to a source file:
 - [ ] Architecture node descriptions match source directories or documented modules.
 - [ ] License name matches the actual `LICENSE` file. If no license file, the README states so without inventing one.
 
+For a substantial README, maintain a temporary evidence ledger while drafting. It need not appear in the README:
+
+| Claim type | Claim | Evidence | Confidence/action |
+|------------|-------|----------|-------------------|
+| Command | `npm run dev` | `package.json` script | Include |
+| Runtime | Node.js 22 | `.nvmrc` | Include |
+| Feature | Batch export | No direct evidence | Omit |
+
+Use the ledger to catch contradictions across badges, prose, tables, diagrams, and multilingual files. Delete or leave it outside the repository after verification unless the user asks for an audit artifact.
+
 ### B. Content Integrity
 Inspect the generated README line by line:
 
-- [ ] First 5 lines tell the reader what the project does and who it's for.
-- [ ] If badges appear near the title, a positioning line comes before them and the badges do not carry the overview by themselves.
+- [ ] The opening content block tells the reader what the project does and who it's for; do not count badges, language navigation, or other metadata as prose.
+- [ ] If badges appear near the title, the positioning statement remains prominent and the badges do not carry the overview by themselves.
 - [ ] No code block exceeds 10 lines.
 - [ ] No log output, error messages, stack traces, or terminal dumps appear.
 - [ ] No AI self-reference anywhere (`grep` for: "I scanned", "I found", "according to", "the model", "the agent", "the repository shows").
@@ -373,6 +431,8 @@ Verify the reader's journey:
 - [ ] Tech stack is a reference table, not narrative prose.
 - [ ] The README would let a new developer clone, configure, and run the project without asking questions.
 - [ ] Existing visual style (badges, centered headers, Mermaid diagrams) is preserved unless explicitly asked to change.
+- [ ] The opening layout is internally consistent: title, positioning statement, navigation, and badges are readable and do not crowd or contradict one another.
+- [ ] Technology badges and the Tech Stack table agree with each other and with the evidence; product capabilities are not presented as technology claims.
 
 ### D. Tone
 Read the entire README as if you're a new team member:
@@ -380,5 +440,14 @@ Read the entire README as if you're a new team member:
 - [ ] Consistent voice — same person appears to have written every section.
 - [ ] No hedging ("should work", "may need", "it is recommended", "please note that").
 - [ ] No generic advice divorced from this specific project.
+
+### E. Presentation
+
+- [ ] Heading depth is consistent and no section is empty.
+- [ ] Tables remain readable on narrow screens; move long explanations below the table when needed.
+- [ ] Code fences have an appropriate language identifier, except plain text output or directory trees.
+- [ ] Links use descriptive labels and relative paths for repository files.
+- [ ] Decorative elements are restrained; badges, callouts, screenshots, and diagrams each serve a reader need.
+- [ ] Multilingual files have equivalent facts and working language navigation without forcing identical sentence structure.
 
 If any check fails, fix it. Do not report the README as complete until all checks pass.
