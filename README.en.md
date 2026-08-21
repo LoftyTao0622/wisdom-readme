@@ -16,11 +16,21 @@
 - **WHAT not HOW** — describes what the project does and how to use it; implementation details belong in developer docs
 - **Maintainer voice** — reads like a project maintainer explaining things to a new team member, not an AI reporting scan results
 
+**Conflict handling:**
+
+- Evidence beats presentation: omit badges, versions, commands, endpoints, and architecture claims that cannot be verified from the repository
+- Reader orientation beats metadata: badges and language navigation do not count as the project introduction; the opening content block must say what the project is and who it serves
+- Preserve useful visual identity: keep valid badges, centered headers, navigation, and Mermaid diagrams when updating an existing README instead of forcing a new template
+- Follow explicit user instructions; do not invent configuration, testing, or deployment sections when the project has no verified path for them
+
 **Capabilities:**
 
 - Auto-detects 14 programming language ecosystems (Node/TS, Python, Java/Kotlin, Go, Rust, C#/.NET, Ruby, PHP, Elixir, C/C++, Swift, Dart/Flutter, Zig, Shell)
 - Adapts structure by project type: Library/SDK, Application/Service, CLI Tool, Full-stack/Monorepo
 - Extracts verifiable API endpoints, directory trees, and configuration keys from source code
+- Separates badges, positioning statements, feature lists, tech-stack tables, and architecture diagrams so they do not contradict one another
+- Handles mixed projects and monorepos by prioritizing the primary reader action and documenting a clear top-level path
+- Updates existing READMEs by inferring whether the user wants a merge or rewrite, while preserving verifiable project-specific details
 - Generates documentation in any human language (Chinese, English, Japanese, etc.)
 - Bilingual output with equivalent structure and facts across versions
 - All done without reading private config, credentials, logs, or build artifacts
@@ -84,11 +94,12 @@ Only document facts that can be verified from the codebase.
 
 ## Workflow
 
-1. **Understand the project** — read existing docs, project description fields, and directory layout to determine what the project does and who it's for
-2. **Choose the structure** — pick the right section layout based on project type (library/app/CLI/full-stack)
+1. **Understand the project** — read existing docs, project description fields, and directory layout to form an evidence-backed positioning statement
+2. **Choose the structure** — pick the right section layout based on the primary reader action and project type (library/app/CLI/full-stack)
 3. **Safe scan** — read manifests, entry points, route definitions, and example configs; skip dependencies, build output, logs, and credentials
-4. **Generate content** — write each section with source-file evidence for every claim
-5. **Mandatory verification** — independent second pass: are commands executable, do endpoints exist in source, is there any AI self-reference or placeholder, is the tone consistent
+4. **Generate content** — establish the opening content block first, then write each section with source-file evidence for every claim
+5. **Cross-check** — reconcile badges, prose, tech-stack tables, architecture diagrams, and multilingual files
+6. **Mandatory verification** — independent second pass: are commands executable, do endpoints exist in source, are there AI references or placeholders, and are all sections useful and consistent
 
 ## Safety Rules
 
@@ -122,8 +133,9 @@ Platform-specific `SKILL.md` copies are kept in sync with the root version.
 ## Maintenance
 
 - Edit the root `SKILL.md` first when changing behavior, then sync to platform directories
+- Treat the root `SKILL.md` as the single source of truth and verify all six copies after synchronization
 - Err on the side of conservative scanning — reading fewer files is better than exposing credentials
-- Preserve the core constraints: evidence first, no invention, reader-centric output
+- Preserve the core constraints: evidence first, no invention, reader-centric output, and clear separation between badges and project positioning
 
 ## License
 
