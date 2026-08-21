@@ -1,8 +1,23 @@
+<div align="center">
+
+<sub><strong>AI CODING ASSISTANT SKILL&nbsp;&nbsp;·&nbsp;&nbsp;DOCUMENTATION SYSTEM</strong></sub>
+
 # generate-readme
 
-[中文](./README.zh-CN.md) | [English](./README.en.md)
+Evidence-backed, actionable README documentation for real software projects.
 
-> A README generation skill for AI coding assistants — produces rigorous, reader-centric project documentation from real repository evidence.
+<a href="./README.zh-CN.md"><img src="https://img.shields.io/badge/中文-README-C2415A?style=flat-square&labelColor=F6E7EA" alt="中文 README"></a>
+<a href="./README.en.md"><img src="https://img.shields.io/badge/English-README-2F6F68?style=flat-square&labelColor=E3F0EE" alt="English README"></a>
+<img src="https://img.shields.io/badge/14_ecosystems-supported-6B5B95?style=flat-square&labelColor=EEEAF4" alt="14 ecosystems supported">
+<img src="https://img.shields.io/badge/evidence--backed-documentation-D28A3D?style=flat-square&labelColor=F7EEDD" alt="Evidence-backed documentation">
+
+<p>
+  <a href="./README.zh-CN.md">中文</a>
+  <span> · </span>
+  <a href="./README.en.md">English</a>
+</p>
+
+</div>
 
 ## What It Does
 

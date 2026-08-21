@@ -1,8 +1,23 @@
+<div align="center">
+
+<sub><strong>AI 编码助手技能&nbsp;&nbsp;·&nbsp;&nbsp;文档生成系统</strong></sub>
+
 # generate-readme
 
-[中文](./README.zh-CN.md) | [English](./README.en.md)
+从真实仓库证据出发，生成严谨、可执行、以读者为中心的 README。
 
-> 面向 AI 编码助手的 README 生成技能 — 从仓库的真实内容出发，生成以读者为中心、严谨可验证的项目文档。
+<a href="./README.zh-CN.md"><img src="https://img.shields.io/badge/中文-README-C2415A?style=flat-square&labelColor=F6E7EA" alt="中文 README"></a>
+<a href="./README.en.md"><img src="https://img.shields.io/badge/English-README-2F6F68?style=flat-square&labelColor=E3F0EE" alt="English README"></a>
+<img src="https://img.shields.io/badge/支持_14_种生态-6B5B95?style=flat-square&labelColor=EEEAF4" alt="支持 14 种编程语言生态">
+<img src="https://img.shields.io/badge/证据驱动文档-D28A3D?style=flat-square&labelColor=F7EEDD" alt="证据驱动文档">
+
+<p>
+  <a href="./README.zh-CN.md">中文</a>
+  <span> · </span>
+  <a href="./README.en.md">English</a>
+</p>
+
+</div>
 
 ## 能做什么
 

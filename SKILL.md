@@ -44,6 +44,28 @@ One sentence explaining what the project is and who it serves.
 
 For a centered or branded README, the same contract applies inside the header block. Do not force badges below the overview when doing so would break an established visual identity; make the positioning statement prominent and immediately readable instead.
 
+### Modern Header Default
+
+When an existing README does not already have a strong visual identity, use a restrained, modern header by default. The header should feel like a polished product surface: clear hierarchy, generous whitespace, and a small number of purposeful visual signals.
+
+Preferred order:
+
+```text
+eyebrow / product category
+project name
+one-sentence positioning statement
+2-5 evidence-backed badges or tags
+language switcher or primary documentation links
+```
+
+Use a centered HTML header block when it improves the project presentation. The eyebrow is short, uppercase or title case, and acts as a quiet category label such as `DEVELOPER TOOL`, `AI CODING ASSISTANT SKILL`, or `OPEN SOURCE LIBRARY`; it must not repeat the project name. Keep the project name as the strongest visual element and keep the positioning statement readable at a glance.
+
+Badges and tags should communicate high-signal facts such as supported languages, runtime, package version, license, documentation language, or verified capabilities. Use at most five in the opening, keep their visual style consistent, and never invent status, download, coverage, deployment, or community claims. Prefer compact `flat-square` or similarly low-noise badges with a restrained multi-color palette; use color to distinguish information categories, not as decoration. For project capabilities that do not have a standard badge, use short text tags only when the capability is directly supported by repository evidence.
+
+Keep the palette modern and balanced: combine a neutral base with two or three muted accent colors rather than relying on one hue, loud gradients, or dense decorative elements. Avoid oversized hero copy, nested cards, excessive emoji, animated badges, and large blocks of shields. Keep the opening usable on narrow screens: badges may wrap naturally, long labels must fit, and the header must not depend on a fixed width or visual asset that cannot render on common Git hosting platforms.
+
+This visual treatment is a default, not a reason to overwrite an established project identity. If the repository already has a coherent branded header, preserve its language, tone, badge style, and layout while applying the same evidence and readability constraints.
+
 ## README Quality Rubric
 
 Before generating, internalize these six criteria. A successful README must satisfy ALL of them. After writing, verify each one (see Verification Pass).
@@ -225,6 +247,8 @@ Do not turn the overview into a stack list, feature list, or implementation tour
 ### Badges And Visual Identity
 
 When the project uses badges, classify them as technology, runtime/version, quality/status, community, or project metadata. Keep only badges supported by repository evidence. Preserve an existing badge style when updating a README; add badges only when they improve orientation or trust. Do not invent license, CI, coverage, deployment, download, or social badges. Badges are compact metadata: they do not replace the positioning statement, Overview, Features, or Tech Stack table.
+
+For a new or visually plain README, apply the `Modern Header Default` above. Keep the header concise and make every badge or tag traceable to a manifest, license, documented feature, or other repository source. Do not turn the header into a technology wall: the project identity and reader-facing purpose come first.
 
 ### Features
 
@@ -448,6 +472,8 @@ Read the entire README as if you're a new team member:
 - [ ] Code fences have an appropriate language identifier, except plain text output or directory trees.
 - [ ] Links use descriptive labels and relative paths for repository files.
 - [ ] Decorative elements are restrained; badges, callouts, screenshots, and diagrams each serve a reader need.
+- [ ] A plain README uses the Modern Header Default when appropriate: clear eyebrow, prominent project name, readable positioning statement, restrained evidence-backed tags, and balanced whitespace.
+- [ ] Header badges wrap cleanly on narrow screens, use a consistent low-noise style, and do not make unsupported claims.
 - [ ] Multilingual files have equivalent facts and working language navigation without forcing identical sentence structure.
 
 If any check fails, fix it. Do not report the README as complete until all checks pass.
