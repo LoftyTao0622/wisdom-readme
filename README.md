@@ -1,46 +1,39 @@
 <div align="center">
 
-<sub><strong>AI CODING ASSISTANT SKILL&nbsp;&nbsp;·&nbsp;&nbsp;DOCUMENTATION SYSTEM</strong></sub>
+<sub>DOCUMENTATION, WITH JUDGMENT</sub>
 
 # generate-readme
 
-从真实仓库证据出发，生成严谨、可执行、以读者为中心的 README。
+从仓库事实出发，写出准确、自然、可以真正上手的 README。
 
-<a href="./README.zh-CN.md"><img src="https://img.shields.io/badge/中文-README-C2415A?style=flat-square&labelColor=F6E7EA" alt="中文 README"></a>
-<a href="./README.en.md"><img src="https://img.shields.io/badge/English-README-2F6F68?style=flat-square&labelColor=E3F0EE" alt="English README"></a>
-<img src="https://img.shields.io/badge/14_ecosystems-supported-6B5B95?style=flat-square&labelColor=EEEAF4" alt="14 ecosystems supported">
-<img src="https://img.shields.io/badge/evidence--backed-documentation-D28A3D?style=flat-square&labelColor=F7EEDD" alt="Evidence-backed documentation">
-
-<p>
-  <a href="./README.zh-CN.md">中文文档</a>
-  <span> · </span>
-  <a href="./README.en.md">English Documentation</a>
-</p>
+[中文说明](./README.zh-CN.md) · [English](./README.en.md)
 
 </div>
 
-## Quick Reference
+> 证据决定写什么，读者路径决定先写什么，审美决定如何取舍与留白。
 
-| Argument | Output |
-|----------|--------|
-| `zh` | Chinese README |
-| `en` | English README |
-| `<locale>` | Any language (e.g., `ja`, `fr`, `ko`) |
-| `both` | `README.zh-CN.md` + `README.en.md` |
-| omitted | Inferred from user's request |
+## 使用
 
-## Trigger
+把 [`SKILL.md`](./SKILL.md) 和 [`references/`](./references/) 放入编码助手的 skill 目录，然后直接描述目标：
 
 ```text
-生成中文 README
-create a readme for this repository
-generate readme language: both
+使用 generate-readme，为当前项目生成中文 README。
+保留现有品牌风格，只写能够从仓库验证的内容。
 ```
 
-## Install
+这个 skill 会先识别项目与主要读者，再选择适合的阅读结构；技术细节经过证据核对，视觉表达则根据项目性格选择简约、产品、编辑或参考型风格。
 
-Copy `SKILL.md` into your assistant's skills directory (`.claude/skills/generate-readme/`, `.codex/skills/generate-readme/`, etc.).
+## 设计线索
+
+| 读者时刻 | README 要完成的事 |
+|----------|-------------------|
+| 第一眼 | 说清项目是什么、为谁解决什么问题 |
+| 第一次停留 | 用示例、界面、结果或图表证明价值 |
+| 第一次行动 | 给出一条可验证、可完成的上手路径 |
+| 深入阅读 | 把配置、参考、运维与贡献信息放到合适位置 |
+
+完整的行为说明见 [中文文档](./README.zh-CN.md)。
 
 ## License
 
-[Apache License 2.0](LICENSE)
+[Apache License 2.0](./LICENSE)

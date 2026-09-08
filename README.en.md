@@ -1,157 +1,96 @@
 <div align="center">
 
-<sub><strong>AI CODING ASSISTANT SKILL&nbsp;&nbsp;·&nbsp;&nbsp;DOCUMENTATION SYSTEM</strong></sub>
+<sub>A README AUTHORING SKILL FOR AI CODING ASSISTANTS</sub>
 
 # generate-readme
 
-Evidence-backed, actionable README documentation for real software projects.
+Turn repository evidence into documentation that is accurate, natural, and easy to act on.
 
-<a href="./README.zh-CN.md"><img src="https://img.shields.io/badge/中文-README-C2415A?style=flat-square&labelColor=F6E7EA" alt="中文 README"></a>
-<a href="./README.en.md"><img src="https://img.shields.io/badge/English-README-2F6F68?style=flat-square&labelColor=E3F0EE" alt="English README"></a>
-<img src="https://img.shields.io/badge/14_ecosystems-supported-6B5B95?style=flat-square&labelColor=EEEAF4" alt="14 ecosystems supported">
-<img src="https://img.shields.io/badge/evidence--backed-documentation-D28A3D?style=flat-square&labelColor=F7EEDD" alt="Evidence-backed documentation">
-
-<p>
-  <a href="./README.zh-CN.md">中文</a>
-  <span> · </span>
-  <a href="./README.en.md">English</a>
-</p>
+[中文](./README.zh-CN.md) · [English](./README.en.md)
 
 </div>
 
-## What It Does
+## Why It Exists
 
-`generate-readme` helps you create or improve README documentation from scratch. It doesn't polish the repository — it documents what can be verified from the files that exist.
+A good README is more than a directory tree, a stack list, and a row of badges. It helps readers decide whether a project fits their needs, makes the value concrete, and gives them a path to a first successful result.
 
-**Core constraints:**
-
-- **Reader-first** — organized by the reader's journey: "What is this → Should I use it → How do I start → Where next"
-- **Evidence-backed** — every feature, command, endpoint, and version traces to a source file; ambiguous claims are omitted
-- **Actionable** — every command is verified from build files or scripts; the reader can copy, paste, and run
-- **WHAT not HOW** — describes what the project does and how to use it; implementation details belong in developer docs
-- **Maintainer voice** — reads like a project maintainer explaining things to a new team member, not an AI reporting scan results
-
-**Conflict handling:**
-
-- Evidence beats presentation: omit badges, versions, commands, endpoints, and architecture claims that cannot be verified from the repository
-- Reader orientation beats metadata: badges and language navigation do not count as the project introduction; the opening content block must say what the project is and who it serves
-- Preserve useful visual identity: keep valid badges, centered headers, navigation, and Mermaid diagrams when updating an existing README instead of forcing a new template
-- Follow explicit user instructions; do not invent configuration, testing, or deployment sections when the project has no verified path for them
-
-**Capabilities:**
-
-- Auto-detects 14 programming language ecosystems (Node/TS, Python, Java/Kotlin, Go, Rust, C#/.NET, Ruby, PHP, Elixir, C/C++, Swift, Dart/Flutter, Zig, Shell)
-- Adapts structure by project type: Library/SDK, Application/Service, CLI Tool, Full-stack/Monorepo
-- Extracts verifiable API endpoints, directory trees, and configuration keys from source code
-- Separates badges, positioning statements, feature lists, tech-stack tables, and architecture diagrams so they do not contradict one another
-- Handles mixed projects and monorepos by prioritizing the primary reader action and documenting a clear top-level path
-- Updates existing READMEs by inferring whether the user wants a merge or rewrite, while preserving verifiable project-specific details
-- Generates documentation in any human language (Chinese, English, Japanese, etc.)
-- Bilingual output with equivalent structure and facts across versions
-- All done without reading private config, credentials, logs, or build artifacts
+`generate-readme` separates two decisions: repository evidence defines what can be said, while the character of the project shapes the narrative and presentation. The result should sound like a maintainer welcoming a capable new user, not a scan report.
 
 ## Quick Start
 
-### Install
-
-Copy `SKILL.md` into your assistant's skills directory, or clone this repo directly into it:
+Copy [`SKILL.md`](./SKILL.md) and [`references/`](./references/) into your coding assistant's skill directory:
 
 ```text
-# Claude Code
-.claude/skills/generate-readme/SKILL.md
-
-# Codex
-.codex/skills/generate-readme/SKILL.md
-
-# Cursor
-.cursor/skills/generate-readme/SKILL.md
-
-# Trae
-.trae/skills/generate-readme/SKILL.md
+.codex/skills/generate-readme/
+├── SKILL.md
+└── references/
 ```
 
-### Trigger
-
-After installation, ask in natural language:
+Then ask for the outcome directly:
 
 ```text
-create a readme for this repository
-给这个项目生成 README
-generate readme language: both
-日本語のREADMEを生成して
+Use generate-readme to rewrite this project's English README.
+Lead with the shortest runnable path, preserve its visual identity,
+and exclude claims that cannot be verified from the repository.
 ```
 
-### Argument
+The skill can also produce Chinese, bilingual, or locale-specific documentation. Each language receives its own file, with equivalent facts and commands but naturally localized prose.
 
-```text
-[language: <locale>]
-```
+## How It Decides
 
-| Argument | Behavior |
-|----------|----------|
-| `zh` | Generate a Chinese README |
-| `en` | Generate an English README |
-| `<locale>` | Generate in any language (e.g., `ja`, `fr`, `ko`) |
-| `both` | Generate `README.zh-CN.md` and `README.en.md` |
-| omitted | Inferred from user request, existing docs, and project audience |
+| Stage | Question | Result |
+|-------|----------|--------|
+| Position | What is this, who is it for, and what does it enable? | One-sentence positioning |
+| Evidence | Can every command, version, capability, and relationship be traced? | Temporary evidence map |
+| Design | Which reading rhythm belongs to this project? | Structure and visual mode |
+| Writing | How does the reader reach a first successful result? | One coherent primary path |
+| Verification | Do the facts, links, voice, and presentation hold together? | Corrected README |
 
-### Recommended Prompts
+Evidence is labeled confirmed, derived, or unknown. Source code, manifests, example configuration, and maintained project docs support direct claims; conventions and incomplete implementations do not become facts through confident wording.
 
-```text
-Use generate-readme to create an English README for this repository.
-Only document facts that can be verified from the codebase.
-```
+## Four Reading Modes
 
-```text
-使用 generate-readme，为当前仓库生成中文 README。
-请基于真实文件扫描，不要编造功能、部署方式或 API。
-```
+The skill does not treat a centered title and a badge row as a universal default. It selects or combines modes from the repository itself:
 
-## Workflow
+- **Minimal** suits libraries, infrastructure, and source repositories. It emphasizes positioning, essential links, and a short entry path.
+- **Product** suits applications and developer tools. A real interface, output, or reproducible result provides proof.
+- **Editorial** suits creative tools, curated collections, and educational projects. Headings, paragraph rhythm, and whitespace carry the identity.
+- **Reference-led** suits APIs, SDKs, and multi-entry CLIs. Readers choose a path before moving into exact usage.
 
-1. **Understand the project** — read existing docs, project description fields, and directory layout to form an evidence-backed positioning statement
-2. **Choose the structure** — pick the right section layout based on the primary reader action and project type (library/app/CLI/full-stack)
-3. **Safe scan** — read manifests, entry points, route definitions, and example configs; skip dependencies, build output, logs, and credentials
-4. **Generate content** — establish the opening content block first, then write each section with source-file evidence for every claim
-5. **Cross-check** — reconcile badges, prose, tech-stack tables, architecture diagrams, and multilingual files
-6. **Mandatory verification** — independent second pass: are commands executable, do endpoints exist in source, are there AI references or placeholders, and are all sections useful and consistent
+The usual rhythm is “orient → prove → activate → deepen,” but the skill does not create empty sections to satisfy a template. Its design reference draws on mature patterns from [Playwright](https://github.com/microsoft/playwright/blob/main/README.md), [uv](https://github.com/astral-sh/uv/blob/main/README.md), [FastAPI](https://github.com/fastapi/fastapi/blob/master/README.md), [Rust](https://github.com/rust-lang/rust/blob/main/README.md), and [shadcn/ui](https://github.com/shadcn-ui/ui/blob/main/README.md).
 
-## Safety Rules
+## Content Boundaries
 
-These paths are never read or displayed:
+The skill verifies installation, run and test commands, configuration, APIs, external services, and license information. It does not read or expose private environment files, credentials, logs, database dumps, dependency directories, build output, or VCS internals.
 
-- Credentials and keys: `.env`, `*.pem`, `*.key`, `credentials.*`, `secrets.*`, `kubeconfig`
-- Private config: `application-prod.yml`, `application-local.yml`, `settings.local.py`
-- Dependencies and build output: `node_modules/`, `dist/`, `build/`, `target/`, `.next/`
-- Logs and databases: `*.log`, `*.sqlite`, `*.db`, `*.sql`
+Visual elements appear only when they perform a job:
 
-When private files are present, paths are never exposed in the output.
+- badges answer real questions about versions, compatibility, build health, or licensing;
+- screenshots, recordings, and benchmark charts demonstrate the primary value;
+- Mermaid diagrams clarify component relationships that prose cannot express compactly;
+- technology lists include only what affects installation, integration, operation, or contribution.
 
-## Project Layout
+## Repository Layout
 
 ```text
 wisdom-readme/
-├── SKILL.md              ← source of truth (edit here)
-├── LICENSE
-├── README.md             ← short index
+├── SKILL.md
+├── references/
+│   ├── design-and-structure.md
+│   ├── evidence-and-scan.md
+│   └── verification.md
+├── README.md
 ├── README.zh-CN.md
 ├── README.en.md
-├── .agents/skills/generate-readme/
-├── .claude/skills/generate-readme/
-├── .codex/skills/generate-readme/
-├── .cursor/skills/generate-readme/
-└── .trae/skills/generate-readme/
+└── LICENSE
 ```
 
-Platform-specific `SKILL.md` copies are kept in sync with the root version.
+The root files are the editing source. `.agents/`, `.claude/`, `.codex/`, `.cursor/`, and `.trae/` contain installable platform copies.
 
 ## Maintenance
 
-- Edit the root `SKILL.md` first when changing behavior, then sync to platform directories
-- Treat the root `SKILL.md` as the single source of truth and verify all six copies after synchronization
-- Err on the side of conservative scanning — reading fewer files is better than exposing credentials
-- Preserve the core constraints: evidence first, no invention, reader-centric output, and clear separation between badges and project positioning
+Update the root `SKILL.md` or the relevant reference first, then synchronize the platform copies. Run the validator supplied by skill-creator to check frontmatter, naming, and unfinished scaffold placeholders. Real project trials and editorial review remain necessary for content quality.
 
 ## License
 
-[Apache License 2.0](LICENSE)
+[Apache License 2.0](./LICENSE)
