@@ -152,6 +152,29 @@ Help, governance, license, trademark when applicable
 
 Keep contributor setup out of the primary user path unless contributors are the main audience. Link detailed API, operations, and contribution material rather than duplicating it.
 
+### Skill Or Prompt Package
+
+Reusable skills need two entry points when both are supported:
+
+```text
+identity → capability boundary → example or prompt → install/use path → adjustable parameters → invariants → file map
+```
+
+Show the host-assistant path first, then the direct-prompt path. A short “adjustable parameters” table makes the package feel configurable without weakening its core behavior. Follow it with two or three invariants that protect provenance, safety, or output quality. For platform copies, identify the editing source and the synchronization rule so maintainers know where a change belongs.
+
+### Intelligent Navigation
+
+Make branching explicit instead of stacking equal-weight links. A compact table works well when readers choose by goal:
+
+| If you want to… | Start here | You will get |
+|----------------|------------|--------------|
+| Try the default path | Quick Start | A first observable result |
+| Adapt the output | Parameters | The supported controls and trade-offs |
+| Understand the method | How it works | The evidence and decision sequence |
+| Maintain the package | Structure / maintenance | Source files and synchronization steps |
+
+Use this only when the repository has genuinely different paths. Otherwise keep the opening linear.
+
 ## Responsive And Accessible Presentation
 
 - Keep tables compact; move paragraphs below them when cells become dense.

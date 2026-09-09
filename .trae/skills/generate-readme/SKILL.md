@@ -66,6 +66,23 @@ These modes guide hierarchy and rhythm; they are not templates. A README may com
 
 The opening must contain the project name and a concise positioning statement. Add badges, a logo, navigation, or a hero only when each improves orientation, trust, or recognition. Metadata never replaces the positioning statement.
 
+#### Make the intelligence visible
+
+Treat the README as a guided interface, not a report. Before drafting, write a small design brief with four decisions:
+
+| Decision | Question | Evidence to capture |
+|----------|----------|---------------------|
+| Primary path | What should a new reader do first? | Install, run, invoke, or open a documented entry point |
+| Proof object | What makes the promise believable fastest? | A real output, screenshot, diagram, benchmark, or complete example |
+| Choice points | Where do readers need to branch? | Platform, language, deployment, or contributor path |
+| Depth boundary | What belongs in linked detail? | Configuration, API reference, operations, and maintainer material |
+
+Use the brief to create a visible path selector when more than one audience or workflow is real. Keep one route recommended and label alternatives by outcome. Do not make readers infer the difference from a list of technologies.
+
+Give the README one proof object above the first setup path whenever the repository contains a trustworthy artifact. Prefer a real project asset or a reproducible output; use a small Mermaid diagram only when relationships are the proof. Every visual must have descriptive alt text and a text equivalent.
+
+Borrow visual language from the project itself. A creative tool may use an editorial hero and an example gallery; a CLI may use a terminal transcript; a service may use an architecture flow. Keep one dominant visual, quiet metadata, short paragraphs, and generous whitespace. Never add decoration to compensate for missing evidence.
+
 Use this editorial sequence when it fits:
 
 1. **Orient** — identity, audience, outcome.
@@ -92,6 +109,8 @@ Use examples that are complete enough to teach the action. Keep the first exampl
 Document APIs only from explicit route definitions or an OpenAPI specification. When the endpoint set is large, summarize useful groups and link to the authoritative reference instead of reproducing it.
 
 Add a diagram only when relationships are harder to understand in prose. Label components by responsibility, and include external services only when they are explicitly configured. Add media only when it demonstrates the primary outcome; use meaningful alt text and ensure the same action remains available in text.
+
+For skills and reusable prompts, document both operating modes when they exist: using the skill through the host assistant and opening the prompt/reference directly. Show one copy-ready request for each mode, then state the observable result. Put adjustable parameters in a compact table and keep immutable principles separate so readers know what is safe to change.
 
 ### 5. Localize Deliberately
 
