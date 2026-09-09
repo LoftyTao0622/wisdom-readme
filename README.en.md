@@ -12,7 +12,7 @@
 
 ## 👥 Who it is for
 
-Use this skill when a real repository needs a README created, rewritten, audited, or localized. It connects evidence gathering, information design, drafting, and newcomer verification into one repeatable path. The goal is a confident first action, not a wall of badges.
+Use this skill when a real repository needs a README created, rewritten, audited, or localized. It connects evidence gathering, information design, drafting, and newcomer verification into one repeatable path. The goal is a confident first action, not a wall of badges. Generated READMEs use restrained semantic emoji and icon-led mini-headings by default: icons guide navigation while words carry the full meaning.
 
 ## 🚀 Quick start
 

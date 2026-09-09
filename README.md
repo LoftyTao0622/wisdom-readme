@@ -16,7 +16,7 @@ An evidence-led README authoring skill for AI coding assistants.
 
 ## 🧭 30 秒了解
 
-`generate-readme` 面向需要创建、重写、审计或本地化 README 的维护者。它把仓库扫描、事实核对、结构选择和新手验证串成一条工作流，并根据项目性格选择简约、产品、编辑或参考型阅读体验。
+`generate-readme` 面向需要创建、重写、审计或本地化 README 的维护者。它把仓库扫描、事实核对、结构选择和新手验证串成一条工作流，并根据项目性格选择简约、产品、编辑或参考型阅读体验。 默认成稿会使用克制的语义 emoji 和图标式小标题：图标负责导航，文字负责完整表达。
 
 ```mermaid
 flowchart LR
