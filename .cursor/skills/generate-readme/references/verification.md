@@ -14,6 +14,7 @@ Trace consequential claims across the opening, prose, badges, tables, examples, 
 - Architecture labels reflect real components and relationships.
 - Performance and comparison claims link to reproducible or project-owned evidence.
 - Badge labels and destinations agree with repository facts.
+- Technology-stack badges represent primary, declared components rather than merely transitive lockfile packages; runtime and version claims come from the appropriate declaration source.
 - License wording matches a license file or explicit manifest metadata.
 - Multilingual files describe the same behavior and constraints.
 

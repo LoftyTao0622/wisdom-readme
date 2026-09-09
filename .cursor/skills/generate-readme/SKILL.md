@@ -66,6 +66,8 @@ These modes guide hierarchy and rhythm; they are not templates. A README may com
 
 The opening must contain the project name and a concise positioning statement. Add badges, a logo, navigation, or a hero only when each improves orientation, trust, or recognition. Metadata never replaces the positioning statement.
 
+For technical projects, prefer a compact technology-stack badge row when at least two primary stack facts help readers assess setup or integration. Each item must be directly supported by the appropriate repository evidence: primary dependencies from manifests, resolved versions only for those declared dependencies (with lockfiles as corroboration), runtime requirements from runtime declarations, and license or build status from their authoritative files or services. Treat the row as one quiet metadata group, include only the primary technologies that help readers assess setup or integration, and omit transitive, incidental, or unverified items. This evidence-backed row is distinct from an exhaustive or decorative badge wall.
+
 #### Make the intelligence visible
 
 Treat the README as a guided interface, not a report. Before drafting, write a small design brief with four decisions:
@@ -130,8 +132,8 @@ Fix failures before reporting completion. Keep the evidence ledger outside the r
 ## Non-Negotiable Constraints
 
 - Do not read or expose credentials, private environment files, logs, database dumps, dependency directories, build output, or VCS internals.
-- Do not invent badges, download counts, compatibility, performance, deployment status, API behavior, or license terms.
+- Do not invent badges, download counts, compatibility, performance, deployment status, API behavior, or license terms. Every badge, including technology-stack badges, must be traceable to repository evidence, with labels, versions, and destinations agreeing with that evidence.
 - Do not create empty, placeholder, or template-only sections.
 - Do not copy implementation walkthroughs into the README when a linked developer document serves the reader better.
-- Do not replace a useful project identity with a generic badge wall or decorative hero.
+- Do not replace a useful project identity with a generic badge wall or decorative hero. A compact, curated row of evidence-backed stack or adoption badges is allowed when it helps readers understand setup, compatibility, architecture, or trust; omit exhaustive or transitive dependencies, unverified logos, stale entries, and badges that merely restate nearby prose.
 - If no license file or manifest license exists, state the absence factually and avoid legal advice.
