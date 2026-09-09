@@ -1,20 +1,20 @@
 <div align="center">
 
-<sub>EVIDENCE FIRST · VISUAL BY DESIGN · BILINGUAL</sub>
+<sub>🧭 EVIDENCE FIRST · 🎨 VISUAL BY DESIGN · 🌐 BILINGUAL</sub>
 
-# generate-readme
+# 📝 generate-readme
 
 **Turn repository facts into a README people can understand, run, and trust.**
 
-[简体中文](./README.zh-CN.md) · [Project overview](./README.md)
+[🧠 Skill](./SKILL.md) · [📚 References](./references/) · [🇨🇳 简体中文](./README.zh-CN.md) · [📖 Project overview](./README.md)
 
 </div>
 
-## Who it is for
+## 👥 Who it is for
 
 Use this skill when a real repository needs a README created, rewritten, audited, or localized. It connects evidence gathering, information design, drafting, and newcomer verification into one repeatable path. The goal is a confident first action, not a wall of badges.
 
-## Quick start
+## 🚀 Quick start
 
 Copy [`SKILL.md`](./SKILL.md) and [`references/`](./references/) into your coding assistant's skill directory, then state the outcome:
 
@@ -26,7 +26,7 @@ to prove the value; trace every command, version, and capability to repository e
 
 The result should open with positioning, show one trustworthy proof object, guide a primary setup path, and survive both an evidence pass and a newcomer read.
 
-## The workflow
+## 🧭 The workflow
 
 ```mermaid
 flowchart LR
@@ -45,7 +45,7 @@ flowchart LR
 | Writing | How does a new user reach a first successful result? | One coherent primary path |
 | Verification | Do facts, links, hierarchy, and voice hold together? | Corrected README |
 
-## Four reading modes
+## 🎛️ Four reading modes
 
 | Mode | Fits | Visual emphasis |
 |------|------|-----------------|
@@ -56,15 +56,15 @@ flowchart LR
 
 When several reader paths are real, the skill makes the choice explicit and marks one route as recommended. When there is one path, it keeps the opening linear.
 
-## Adjustable parameters and invariants
+## ⚙️ Adjustable parameters and invariants
 
 For skill or prompt repositories, the README separates safe controls—layout, example depth, language, or output format—from the principles that protect provenance, privacy, and quality. Readers can see what to tune without guessing what the system is allowed to invent.
 
-## Content boundaries
+## 🛡️ Content boundaries
 
 The skill does not read or expose credentials, private environment files, logs, database dumps, dependency directories, build output, or VCS internals. Source, manifests, example configuration, route registration, and maintained docs can support direct claims; naming conventions, an isolated Dockerfile, or incomplete code cannot prove deployment, performance, or compatibility.
 
-## Repository layout
+## 🗂️ Repository layout
 
 ```text
 wisdom-readme/
@@ -81,6 +81,6 @@ wisdom-readme/
 
 The root files are the editing source. `.agents/`, `.claude/`, `.codex/`, `.cursor/`, and `.trae/` contain platform copies. Update the root first, then synchronize the copies.
 
-## License
+## 📄 License
 
 [Apache License 2.0](./LICENSE)

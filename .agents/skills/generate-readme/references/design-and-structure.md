@@ -66,6 +66,10 @@ Choose alignment deliberately. Left alignment reads as technical and direct. Cen
 
 Markdown cannot control typography reliably across hosts. Create hierarchy through short headings, paragraph length, code examples, whitespace, and the order of information. Use HTML sparingly for a header, responsive `<picture>`, or image sizing; important content must remain readable in plain Markdown.
 
+### Icon-led headings and labels
+
+Emoji or small icons can provide useful wayfinding when the project already has an expressive, creative, educational, or community-oriented voice. Use one semantic mark before a concise text heading or label; a compact metadata row may group a few distinct marks when each segment has a clear meaning or link. Keep the text complete on its own so the README remains clear when emoji rendering differs or is unavailable. Reuse a stable semantic vocabulary, let related headings share a mark while distinct scenarios may use distinct marks, keep icon meaning aligned across localized files, and verify that generated heading links still resolve. Treat a reference project’s emoji choices as visual inspiration only; select marks that fit this repository’s identity and evidence. For long examples, a `<details><summary>` label can keep the page scannable; make the summary text complete and keep a copyable text path in the expanded content. Never use emoji as the sole label, to imply an unsupported claim, or to compensate for missing proof.
+
 ## Natural Writing
 
 - Begin a section with its useful claim or action. Do not announce what the section will discuss.
@@ -74,7 +78,7 @@ Markdown cannot control typography reliably across hosts. Create hierarchy throu
 - Use bullets for parallel choices and tables for exact comparisons. Use prose when one idea leads to the next.
 - Keep one term for each concept. Match names used by the product and repository.
 - Use bold to reveal scan structure, not to decorate every sentence.
-- Avoid excessive emoji, ornamental dividers, nested callouts, animated assets, and badges that restate the prose.
+- Use emoji for semantic wayfinding when it fits the project; avoid excessive emoji, ornamental dividers, nested callouts, animated assets, and badges that restate the prose.
 
 ## Proof Before Detail
 
@@ -152,6 +156,29 @@ Help, governance, license, trademark when applicable
 
 Keep contributor setup out of the primary user path unless contributors are the main audience. Link detailed API, operations, and contribution material rather than duplicating it.
 
+### Skill Or Prompt Package
+
+Reusable skills need two entry points when both are supported:
+
+```text
+identity → capability boundary → example or prompt → install/use path → adjustable parameters → invariants → file map
+```
+
+Show the host-assistant path first, then the direct-prompt path. A short “adjustable parameters” table makes the package feel configurable without weakening its core behavior. Follow it with two or three invariants that protect provenance, safety, or output quality. For platform copies, identify the editing source and the synchronization rule so maintainers know where a change belongs.
+
+### Intelligent Navigation
+
+Make branching explicit instead of stacking equal-weight links. A compact table works well when readers choose by goal:
+
+| If you want to… | Start here | You will get |
+|----------------|------------|--------------|
+| Try the default path | Quick Start | A first observable result |
+| Adapt the output | Parameters | The supported controls and trade-offs |
+| Understand the method | How it works | The evidence and decision sequence |
+| Maintain the package | Structure / maintenance | Source files and synchronization steps |
+
+Use this only when the repository has genuinely different paths. Otherwise keep the opening linear.
+
 ## Responsive And Accessible Presentation
 
 - Keep tables compact; move paragraphs below them when cells become dense.
@@ -171,3 +198,4 @@ Use these projects as structural references, not as templates or evidence about 
 - [FastAPI](https://github.com/fastapi/fastapi/blob/master/README.md) — product identity and an end-to-end create/run/observe example.
 - [Rust](https://github.com/rust-lang/rust/blob/main/README.md) — a concise source-repository hub that routes users to maintained guides.
 - [shadcn/ui](https://github.com/shadcn-ui/ui/blob/main/README.md) — restrained positioning and a direct path to maintained documentation.
+- [Outlines](https://github.com/dottxt-ai/outlines) — semantic emoji in the tagline, action headings, and example labels; use the pattern as visual inspiration while keeping technical sections clear.

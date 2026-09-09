@@ -36,7 +36,7 @@ Read from the top without relying on prior repository knowledge.
 
 - Heading levels are consistent and no section is empty.
 - Paragraphs, lists, tables, code, and media form a varied but calm rhythm.
-- Badges, bold text, emoji, callouts, and separators are restrained.
+- Badges, bold text, emoji, callouts, and separators are restrained; any emoji or icon-led heading adds wayfinding and remains understandable as text.
 - One visual element clearly leads; multiple decorative elements do not compete.
 - Tables remain readable on narrow screens.
 - Code fences use an appropriate language identifier.

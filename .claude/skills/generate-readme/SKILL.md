@@ -81,7 +81,7 @@ Use the brief to create a visible path selector when more than one audience or w
 
 Give the README one proof object above the first setup path whenever the repository contains a trustworthy artifact. Prefer a real project asset or a reproducible output; use a small Mermaid diagram only when relationships are the proof. Every visual must have descriptive alt text and a text equivalent.
 
-Borrow visual language from the project itself. A creative tool may use an editorial hero and an example gallery; a CLI may use a terminal transcript; a service may use an architecture flow. Keep one dominant visual, quiet metadata, short paragraphs, and generous whitespace. Never add decoration to compensate for missing evidence.
+Borrow visual language from the project itself. A creative tool may use an editorial hero and an example gallery; a CLI may use a terminal transcript; a service may use an architecture flow. When the user names a reference README, inspect its visual grammar (including any emoji or icon-led labels) as inspiration, then adapt it to this repository’s identity and evidence rather than copying its content. Keep one dominant visual, quiet metadata, short paragraphs, and generous whitespace. Never add decoration to compensate for missing evidence. Use at most one semantic emoji or icon per heading or label segment. A compact metadata row may group a few distinct marks when each segment has a clear meaning or link. Keep the wording complete without the mark and carry the same vocabulary across localized files.
 
 Use this editorial sequence when it fits:
 
